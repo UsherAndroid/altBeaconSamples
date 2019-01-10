@@ -15,9 +15,12 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by dyoung on 12/13/13.
  */
+@DebugLog
 public class BeaconReferenceApplication extends Application implements BootstrapNotifier {
     private static final String TAG = "BeaconReferenceApp";
     private RegionBootstrap regionBootstrap;

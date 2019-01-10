@@ -16,10 +16,13 @@ import android.widget.EditText;
 
 import org.altbeacon.beacon.BeaconManager;
 
+import hugo.weaving.DebugLog;
+
 /**
  * @author dyoung
  * @author Matt Tyler
  */
+@DebugLog
 public class MonitoringActivity extends Activity {
     protected static final String TAG = "MonitoringActivity";
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;

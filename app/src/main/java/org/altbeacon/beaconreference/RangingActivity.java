@@ -14,6 +14,9 @@ import org.altbeacon.beacon.Region;
 
 import java.util.Collection;
 
+import hugo.weaving.DebugLog;
+
+@DebugLog
 public class RangingActivity extends Activity implements BeaconConsumer {
     protected static final String TAG = "RangingActivity";
     private BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);

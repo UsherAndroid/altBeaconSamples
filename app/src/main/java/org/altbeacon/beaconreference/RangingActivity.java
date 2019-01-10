@@ -29,9 +29,11 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
 
     @SuppressLint("ConstantLocale")
     public static final SimpleDateFormat FORMAT = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-    public static final String FIRST_ID = "2f234454-cf6d-4a0f-adf2-f4911ba9ffa9";
-    public static final String SECOND_ID = "9";
-    public static final String THIRD_ID = "32";
+    public static final Identifier ID_1 = Identifier.parse("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6");
+    public static final Identifier ID_2 = Identifier.parse("1");
+    public static final Identifier ID_3 = Identifier.parse("2");
+    private static final boolean USE_FIXED_REGION = true;
+    private static final String UNIQUE_ID = "unique_id";
     private TextView tv_log;
 
     @Override
@@ -75,7 +77,8 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
     @Override
     public void onBeaconServiceConnect() {
         try {
-            BeaconManager.getInstanceForApplication(getApplication()).startRangingBeaconsInRegion(fixedRegion());
+            Region region = USE_FIXED_REGION ? fixedRegion() : allRegion();
+            BeaconManager.getInstanceForApplication(getApplication()).startRangingBeaconsInRegion(region);
             BeaconManager.getInstanceForApplication(getApplication()).addRangeNotifier(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -83,10 +86,12 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
     }
 
     @NonNull
+    private Region allRegion() {
+        return new Region(UNIQUE_ID, null, null, null);
+    }
+
+    @NonNull
     private Region fixedRegion() {
-        return new Region(SECOND_ID,
-                Identifier.parse(FIRST_ID),
-                Identifier.parse(SECOND_ID),
-                Identifier.parse(THIRD_ID));
+        return new Region(UNIQUE_ID, ID_1, ID_2, ID_3);
     }
 }

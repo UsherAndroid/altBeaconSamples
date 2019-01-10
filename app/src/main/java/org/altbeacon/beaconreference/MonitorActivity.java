@@ -8,15 +8,13 @@ import android.support.annotation.NonNull;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
-import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
@@ -24,7 +22,7 @@ import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 @DebugLog
-public class RangingActivity extends Activity implements BeaconConsumer, RangeNotifier {
+public class MonitorActivity extends Activity implements BeaconConsumer, MonitorNotifier {
 
 
     @SuppressLint("ConstantLocale")
@@ -32,7 +30,6 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
     public static final Identifier ID_1 = Identifier.parse("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6");
     public static final Identifier ID_2 = Identifier.parse("1");
     public static final Identifier ID_3 = Identifier.parse("2");
-    private static final boolean USE_FIXED_REGION = true;
     private static final String UNIQUE_ID = "unique_id";
     private TextView tv_log;
 
@@ -42,6 +39,7 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
         setContentView(R.layout.activity_ranging);
         tv_log = findViewById(R.id.tv_log);
         tv_log.setMovementMethod(new ScrollingMovementMethod());
+        BeaconManager.setRegionExitPeriod(3000);
     }
 
     @Override
@@ -56,19 +54,6 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
         BeaconManager.getInstanceForApplication(getApplication()).unbind(this);
     }
 
-    @Override
-    public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(time()).append(":").append("(count:").append(beacons.size()).append(")\n");
-        for (Beacon beacon : beacons) {
-            sb.append(beacon).append(":").append(beacon.getDistance()).append("\n");
-        }
-        String log = sb.toString();
-        Timber.i(log);
-        tv_log.append(log);
-
-    }
-
     @NonNull
     private String time() {
         return FORMAT.format(new Date());
@@ -77,21 +62,32 @@ public class RangingActivity extends Activity implements BeaconConsumer, RangeNo
     @Override
     public void onBeaconServiceConnect() {
         try {
-            Region region = USE_FIXED_REGION ? fixedRegion() : allRegion();
-            BeaconManager.getInstanceForApplication(getApplication()).startRangingBeaconsInRegion(region);
-            BeaconManager.getInstanceForApplication(getApplication()).addRangeNotifier(this);
+            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(UNIQUE_ID, null, null, null));
+            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString(), ID_1, null, null));
+            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString() + ":" + ID_2.toString(), ID_1, ID_2, null));
+            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString() + ":" + ID_2.toString() + ":" + ID_3.toString(), ID_1, ID_2, ID_3));
+            BeaconManager.getInstanceForApplication(getApplication()).addMonitorNotifier(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @NonNull
-    private Region allRegion() {
-        return new Region(UNIQUE_ID, null, null, null);
+    @Override
+    public void didEnterRegion(Region region) {
+        String log = time() + ":enter region:" + region + "\n";
+        Timber.i(log);
+        tv_log.append(log);
     }
 
-    @NonNull
-    private Region fixedRegion() {
-        return new Region(UNIQUE_ID, ID_1, ID_2, ID_3);
+    @Override
+    public void didExitRegion(Region region) {
+        String log = time() + ":exit region:" + region + "\n";
+        Timber.i(log);
+        tv_log.append(log);
+    }
+
+    @Override
+    public void didDetermineStateForRegion(int i, Region region) {
+
     }
 }

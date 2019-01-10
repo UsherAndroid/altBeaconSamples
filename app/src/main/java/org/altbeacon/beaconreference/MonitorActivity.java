@@ -63,11 +63,10 @@ public class MonitorActivity extends Activity implements BeaconConsumer, Monitor
     @Override
     public void onBeaconServiceConnect() {
         try {
-            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(UNIQUE_ID, null, null, null));
-            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString(), ID_1, null, null));
-            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString() + ":" + ID_2.toString(), ID_1, ID_2, null));
+//            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(UNIQUE_ID, null, null, null));
+//            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString(), ID_1, null, null));
+//            BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString() + ":" + ID_2.toString(), ID_1, ID_2, null));
             BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region(ID_1.toString() + ":" + ID_2.toString() + ":" + ID_3.toString(), ID_1, ID_2, ID_3));
-
             BeaconManager.getInstanceForApplication(getApplication()).startMonitoringBeaconsInRegion(new Region("2f234454-cf6d-4a0f-adf2-f4911ba9ffa9:9:32",
                     Identifier.parse("2f234454-cf6d-4a0f-adf2-f4911ba9ffa9"),
                     Identifier.parse("9"),

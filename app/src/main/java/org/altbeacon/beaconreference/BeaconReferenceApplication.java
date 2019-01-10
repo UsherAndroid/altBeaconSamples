@@ -1,23 +1,19 @@
 package org.altbeacon.beaconreference;
 
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
-import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
+import org.altbeacon.beacon.startup.RegionBootstrap;
 
 /**
  * Created by dyoung on 12/13/13.
@@ -105,6 +101,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
             regionBootstrap = null;
         }
     }
+
     public void enableMonitoring() {
         Region region = new Region("backgroundRegion",
                 null, null, null);
@@ -133,7 +130,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
             if (monitoringActivity != null) {
                 // If the Monitoring Activity is visible, we log info about the beacons we have
                 // seen on its display
-                logToDisplay("I see a beacon again" );
+                logToDisplay("I see a beacon again");
             } else {
                 // If we have already seen beacons before, but the monitoring activity is not in
                 // the foreground, we send a notification to the user on subsequent detections.
@@ -152,7 +149,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
 
     @Override
     public void didDetermineStateForRegion(int state, Region region) {
-        logToDisplay("Current region state is: " + (state == 1 ? "INSIDE" : "OUTSIDE ("+state+")"));
+        logToDisplay("Current region state is: " + (state == 1 ? "INSIDE" : "OUTSIDE (" + state + ")"));
     }
 
     private void sendNotification() {

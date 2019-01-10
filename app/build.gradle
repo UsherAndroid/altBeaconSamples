@@ -18,7 +18,8 @@ android {
     defaultConfig {
         applicationId "org.altbeacon.beaconreference"
         minSdkVersion 19
-        targetSdkVersion 28
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 22
     }
     buildTypes {
         release {

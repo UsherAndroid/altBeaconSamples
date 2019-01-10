@@ -90,9 +90,6 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
         // is not visible.  This reduces bluetooth power usage by about 60%
         backgroundPowerSaver = new BackgroundPowerSaver(this);
 
-        // If you wish to test beacon detection in the Android Emulator, you can use code like this:
-        // BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
-        // ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
     }
 
     public void disableMonitoring() {

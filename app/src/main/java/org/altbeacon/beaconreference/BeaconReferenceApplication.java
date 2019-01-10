@@ -26,8 +26,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
     private RegionBootstrap regionBootstrap;
     private BackgroundPowerSaver backgroundPowerSaver;
     private boolean haveDetectedBeaconsSinceBoot = false;
-    private MonitoringActivity monitoringActivity = null;
-    private String cumulativeLog = "";
+    private RangingActivity monitoringActivity = null;
 
     public void onCreate() {
         super.onCreate();
@@ -119,7 +118,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
 
             // The very first time since boot that we detect an beacon, we launch the
             // MainActivity
-            Intent intent = new Intent(this, MonitoringActivity.class);
+            Intent intent = new Intent(this, RangingActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             // Important:  make sure to add android:launchMode="singleInstance" in the manifest
             // to keep multiple copies of this activity from getting created if the user has
@@ -160,7 +159,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
                         .setSmallIcon(R.drawable.ic_launcher);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntent(new Intent(this, MonitoringActivity.class));
+        stackBuilder.addNextIntent(new Intent(this, RangingActivity.class));
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
@@ -172,19 +171,7 @@ public class BeaconReferenceApplication extends Application implements Bootstrap
         notificationManager.notify(1, builder.build());
     }
 
-    public void setMonitoringActivity(MonitoringActivity activity) {
-        this.monitoringActivity = activity;
-    }
 
     private void logToDisplay(String line) {
-        cumulativeLog += (line + "\n");
-        if (this.monitoringActivity != null) {
-            this.monitoringActivity.updateLog(cumulativeLog);
-        }
     }
-
-    public String getLog() {
-        return cumulativeLog;
-    }
-
 }

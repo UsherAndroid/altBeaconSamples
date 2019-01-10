@@ -9,6 +9,7 @@ import android.widget.EditText;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -59,7 +60,10 @@ public class RangingActivity extends Activity implements BeaconConsumer {
 
         };
         try {
-            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId",
+                    Identifier.parse("2f234454-cf6d-4a0f-adf2-f4911ba9ffa9"),
+                    null,
+                    null));
             beaconManager.addRangeNotifier(rangeNotifier);
         } catch (RemoteException e) {
         }
